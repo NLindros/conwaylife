@@ -1,9 +1,9 @@
-from functools import reduce
+from itertools import groupby
 
 
-def neighbours(cell, grid):
+def possible_neighbours(cell):
     x, y = cell
-    possible_neighbours = (
+    return {
         (x - 1, y),
         (x - 1, y - 1),
         (x - 1, y + 1),
@@ -12,8 +12,11 @@ def neighbours(cell, grid):
         (x + 1, y - 1),
         (x + 1, y),
         (x + 1, y + 1),
-    )
-    return {cell for cell in possible_neighbours if cell in grid}
+    }
+
+
+def amount_of_neighbours(cell, grid):
+    return len(possible_neighbours(cell) & grid)
 
 
 def step(grid):
@@ -23,26 +26,26 @@ def step(grid):
 
 
 def cull(grid):
-    good_population_size = (2, 3)
-    still_living = {
-        cell for cell in grid if len(neighbours(cell, grid)) in good_population_size
+    healthy_amount_of_neighbours = (2, 3)
+    return {
+        cell
+        for cell in grid
+        if amount_of_neighbours(cell, grid) in healthy_amount_of_neighbours
     }
-
-    return still_living
 
 
 def spawn(grid):
-    new_born = set()
-    for cell in expand_grid(grid):
-        N = neighbours(cell, grid)
-        if len(N) == 3:
-            new_born.add(cell)
-    return new_born
+    perfect_breeding_population = 3
+    return {
+        cell
+        for cell in expand_grid(grid)
+        if amount_of_neighbours(cell, grid) == perfect_breeding_population
+    }
 
 
 def expand_grid(grid):
     min_x, *_, max_x = sorted(cell[0] for cell in grid)
     min_y, *_, max_y = sorted(cell[1] for cell in grid)
-    x_range = min_x - 1, max_x + 2
-    y_range = min_y - 1, max_y + 2
-    return {(x, y) for x in range(*x_range) for y in range(*y_range)}
+    x_range = range(min_x - 1, max_x + 2)
+    y_range = range(min_y - 1, max_y + 2)
+    return {(x, y) for x in x_range for y in y_range}
