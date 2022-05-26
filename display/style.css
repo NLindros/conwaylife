@@ -1,0 +1,26 @@
+* {
+    color: white;
+}
+
+h1 {
+    text-shadow: 3px 6px 10px black;
+}
+
+body {
+    background-color: darkolivegreen
+}
+
+table {
+    margin: 5%;
+}
+
+td {
+    border: 1px solid white;
+    background-color: lightgray;
+    width: 10px;
+    height: 10px;
+}
+
+.active {
+    background-color: darkolivegreen;
+}
