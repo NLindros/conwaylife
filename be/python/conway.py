@@ -1,7 +1,11 @@
 from itertools import groupby
+from typing import Tuple, Set
+
+Cell = Tuple[int, int]
+Grid = Set[Cell]
 
 
-def possible_neighbours(cell):
+def possible_neighbours(cell: Cell) -> Grid:
     x, y = cell
     return {
         (x - 1, y),
@@ -15,17 +19,17 @@ def possible_neighbours(cell):
     }
 
 
-def amount_of_neighbours(cell, grid):
+def amount_of_neighbours(cell: Cell, grid: Grid) -> int:
     return len(possible_neighbours(cell) & grid)
 
 
-def step(grid):
+def step(grid: Grid) -> Grid:
     still_living = cull(grid)
     new_born = spawn(grid)
     return still_living | new_born
 
 
-def cull(grid):
+def cull(grid: Grid) -> Grid:
     healthy_amount_of_neighbours = (2, 3)
     return {
         cell
@@ -34,7 +38,7 @@ def cull(grid):
     }
 
 
-def spawn(grid):
+def spawn(grid: Grid) -> Grid:
     perfect_breeding_population = 3
     return {
         cell
@@ -43,7 +47,7 @@ def spawn(grid):
     }
 
 
-def expand_grid(grid):
+def expand_grid(grid: Grid) -> Grid:
     min_x, *_, max_x = sorted(cell[0] for cell in grid)
     min_y, *_, max_y = sorted(cell[1] for cell in grid)
     x_range = range(min_x - 1, max_x + 2)

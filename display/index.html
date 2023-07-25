@@ -11,9 +11,22 @@
 </head>
 
 <body>
-    <h1>Conways Game of Life</h1>
     <div class="container">
-        <table class="grid-base"></table>
+        <h1>Conways Game of Life</h1>
+        <div class="buttons">
+            <button class="reset" onclick=resetButtonClick()>Reset</button>
+            <button class="run" onclick=runButtonClick()>Run</button>
+            <div class="life-time-group">
+                <label for="life-time">Life time</label>
+                <input type="range" id="life-time" name="life-time" min="50" max="1000" value="500" step="50">
+                <span>
+                    <output id="life-time-value"></output> s
+                </span>
+            </div>
+        </div>
+        <div class="container">
+            <table class="grid-base"></table>
+        </div>
     </div>
 </body>
 
