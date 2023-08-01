@@ -20,8 +20,23 @@ body {
 }
 
 .container {
-    margin: 2em auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.load-bar {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main.bar {
     width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 table {
@@ -33,6 +48,12 @@ td {
     background-color: var(--board-color);
     width: 10px;
     height: 10px;
+}
+
+.scenarios td {
+    border: 0;
+    width: 2px;
+    height: 2px;
 }
 
 .active {
