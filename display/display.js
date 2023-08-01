@@ -34,7 +34,6 @@ const toogleCell = (event) => {
         grid.cells = [...grid.cells, cell].sort(sort2DByRows).sort(sort2DByCols);
         event.currentTarget.classList.add('active');
     }
-    console.log(grid.cells);
 }
 
 const clampToOne = val => { return val === 0 ? 0 : val > 0 ? 1 : -1 }
@@ -121,9 +120,11 @@ const stepButtonClick = async () => {
 const runButtonClick = () => {
     const btn = document.querySelector('.buttons .run');
     isRunning = !isRunning;
-    const btnText = isRunning ? "Pause" : "Run";
-    btn.innerText = btnText;
-    runLife()
+    btn.innerText = isRunning ? "Pause" : "Run";
+    if (isRunning) {
+        saveLastRun(grid.cells)
+        runLife()
+    }
 }
 
 const runLife = async () => {
@@ -145,10 +146,6 @@ const getNextGrid = async (data) => {
     return response.json();
 }
 
-createGrid();
-drawBoard(grid.cells);
-
-
 const saveScenario = (cells) => {
     const scenario = document.createElement('div')
     scenario.addEventListener('click', loadScenario)
@@ -157,5 +154,17 @@ const saveScenario = (cells) => {
     scenario.appendChild(createMiniGrid(cells))
     scenarioElements.appendChild(scenario)
 }
+
+const saveLastRun = (cells) => {
+    const lastRunScenario = document.querySelector('.last-run > .scenario')
+    lastRunScenario.removeChild(lastRunScenario.lastChild)
+    lastRunScenario.appendChild(createMiniGrid(cells))
+    lastRunScenario.addEventListener('click', loadScenario)
+    lastRunScenario.setAttribute('data-cells', cells)
+}
+
+createGrid();
+drawBoard(grid.cells);
+saveLastRun(initCells)
 
 

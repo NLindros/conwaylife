@@ -50,10 +50,16 @@ td {
     height: 10px;
 }
 
-.scenarios td {
+.scenario td {
     border: 0;
     width: 2px;
     height: 2px;
+}
+
+.last-run h3 {
+    text-align: center;
+    font-size: 0.8em;
+    margin: 0;
 }
 
 .active {
