@@ -86,9 +86,12 @@ const clearBoard = () => {
 }
 
 const drawBoard = cells => {
-    cells.forEach(cell =>
-        document.getElementById(cellId(...cell)).classList.add("active")
-    )
+    cells.forEach(cell => {
+        const cellElement = document.getElementById(cellId(...cell));
+        if (cellElement) {
+            cellElement.classList.add("active")
+        }
+    })
 }
 
 const collectPairs = flatCells => {
@@ -108,7 +111,7 @@ const loadScenario = (event) => {
 }
 
 const stepLife = async () => {
-    grid = await getNextGrid(grid);
+    grid.cells = await getNextGrid(grid.cells);
     clearBoard();
     drawBoard(grid.cells);
 }
@@ -127,6 +130,26 @@ const runButtonClick = () => {
     }
 }
 
+const clearButtonClick = () => {
+    grid.cells = [];
+    clearBoard();
+}
+
+const randomButtonClick = () => {
+    const newGrid = []
+    for (let y = -gridSize; y < gridSize; y++) {
+        for (let x = -gridSize; x < gridSize; x++) {
+            let active = Math.random() >= 0.7;
+            if (active) {
+                newGrid.push([x, y])
+            }
+        }
+    }
+    grid.cells = newGrid;
+    clearBoard();
+    drawBoard(grid.cells);
+}
+
 const runLife = async () => {
     if (isRunning == true) {
         await stepLife();
@@ -134,16 +157,20 @@ const runLife = async () => {
     }
 }
 
-const getNextGrid = async (data) => {
+const getNextGrid = async (cells) => {
+    if (cells.length === 0) {
+        return []
+    }
     const url = "http://127.0.0.1:8000"
     const response = await fetch(url, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ cells: cells }),
     });
-    return response.json();
+    const newGrid = await response.json();
+    return newGrid.cells;
 }
 
 const saveScenario = (cells) => {
