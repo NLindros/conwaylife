@@ -14,20 +14,21 @@
     <div class="container">
         <div class="load-bar">
             <h2>Scenarios</h2>
-            <div class="last-run">
-                <h3>Previous run</h3>
-                <div class="scenario">
+            <div class="scenarios">
+                <div class="scenario last-run">
+                    <h3>Previous run</h3>
                     <table></table>
                 </div>
             </div>
-            <div class="scenarios"></div>
         </div>
         <div class="main bar">
             <h1>Conways Game of Life</h1>
             <div class="buttons">
                 <button class="save" onclick=saveButtonClick()>Save</button>
                 <button class="clear" onclick=clearButtonClick()>Clear</button>
-                <button class="Random" onclick=randomButtonClick()>Random</button>
+                <button class="random" onclick=randomButtonClick()>Random</button>
+            </div>
+            <div class="buttons">
                 <button class="step" onclick=stepButtonClick()>Step</button>
                 <button class="run" onclick=runButtonClick()>Run</button>
                 <div class="life-time-group">

@@ -42,7 +42,9 @@ const sort2DByCols = (a, b) => { return clampToOne(a[0] - b[0]) };
 const sort2DByRows = (a, b) => { return clampToOne(a[1] - b[1]) };
 
 const saveButtonClick = () => {
-    saveScenario(grid.cells)
+    const now = new Date()
+    const timeString = `Save: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+    saveScenario(grid.cells, timeString)
 }
 
 const createMiniGrid = (cells) => {
@@ -173,8 +175,12 @@ const getNextGrid = async (cells) => {
     return newGrid.cells;
 }
 
-const saveScenario = (cells) => {
+const saveScenario = (cells, title) => {
     const scenario = document.createElement('div')
+    const titleElement = document.createElement('h3');
+    titleElement.innerText = title
+    scenario.appendChild(titleElement)
+
     scenario.addEventListener('click', loadScenario)
     scenario.classList.add('scenario')
     scenario.setAttribute('data-cells', cells)
@@ -183,7 +189,7 @@ const saveScenario = (cells) => {
 }
 
 const saveLastRun = (cells) => {
-    const lastRunScenario = document.querySelector('.last-run > .scenario')
+    const lastRunScenario = document.querySelector('.last-run')
     lastRunScenario.removeChild(lastRunScenario.lastChild)
     lastRunScenario.appendChild(createMiniGrid(cells))
     lastRunScenario.addEventListener('click', loadScenario)
@@ -193,5 +199,9 @@ const saveLastRun = (cells) => {
 createGrid();
 drawBoard(grid.cells);
 saveLastRun(initCells)
-
+saveScenario([[-10, -8], [-9, -8], [-8, -8], [-8, -9], [-9, -10]], 'Glider');
+saveScenario([
+    [0, -5], [0, -4], [-1, -3], [1, -3], [0, -2], [0, -1],
+    [0, 0], [0, 1], [-1, 2], [1, 2], [0, 3], [0, 4]
+], 'Pentadecathlon');
 
