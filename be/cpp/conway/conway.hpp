@@ -1,7 +1,7 @@
 #ifndef CONWAY_HPP
 #define CONWAY_HPP
 
-#include <vector>
+#include <set>
 
 namespace conway
 {
@@ -10,8 +10,12 @@ namespace conway
         int x;
         int y;
     };
-    using Life = std::vector<Cell>;
+    bool operator<(const Cell &a, const Cell &b)
+    {
+        return std::tie(a.x, a.y) < std::tie(b.x, b.y);
+    }
 
+    using Life = std::set<Cell>;
     Life getNeigbours(Life &life);
 
     bool keepAlive(Cell target, Life const &life);
