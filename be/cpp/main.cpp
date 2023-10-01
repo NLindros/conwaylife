@@ -4,6 +4,5 @@
 
 int main()
 {
-    std::cout << "Cells:" << std::endl;
-    std::cout << getCells() << std::endl;
+    return 0;
 }
