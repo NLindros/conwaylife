@@ -22,11 +22,11 @@ class Grid(BaseModel):
     cells: List[List[int]]
 
 
-def serialize_grid(grid: conway.Grid) -> Grid:
+def serialize_grid(grid) -> Grid:
     return {"cells": list(map(list, grid))}
 
 
-def deserialize_grid(grid: Grid) -> conway.Grid:
+def deserialize_grid(grid: Grid):
     return set(map(tuple, grid.cells))
 
 
@@ -37,5 +37,10 @@ async def home():
 
 @app.post("/")
 async def step(grid: Grid):
-    next_grid = conway.step(deserialize_grid(grid))
-    return serialize_grid(next_grid)
+    unpacked_grid = deserialize_grid(grid)
+    print(unpacked_grid)
+    next_grid = conway.step(unpacked_grid)
+    payload = serialize_grid(next_grid)
+    print("Payload:")
+    print(payload)
+    return payload

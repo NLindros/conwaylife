@@ -1,8 +1,11 @@
-#include "conway/conway.hpp"
 #include <iostream>
-#include <string>
+#include <vector>
+#include <utility>
+#include <cstdlib>
 
-int main()
+#include "be/cpp/conway/conway.hpp"
+
+int main(int argc, char *argv[])
 {
     return 0;
 }

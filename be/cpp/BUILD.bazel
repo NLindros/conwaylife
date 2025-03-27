@@ -1,7 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 cc_binary(
-    name="main",
+    name="conway-bin",
     srcs=["main.cpp"],
     deps = [
         "//be/cpp/conway:conway",

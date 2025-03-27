@@ -1,11 +1,10 @@
 #include <algorithm>
-#include <tuple>
 
-#include "conway.hpp"
+#include "be/cpp/conway/conway.hpp"
 
 namespace conway
 {
-    bool isNeighbour(Cell a, Cell b)
+    bool isNeighbour(const Cell &a, const Cell &b)
     {
         if (a.x == b.x && a.y == b.y)
         {
@@ -16,47 +15,79 @@ namespace conway
         return x_cond && y_cond;
     };
 
-    bool keepAlive(Cell target, Life const &life)
+    bool keepAlive(const int numberOfNeighbours)
     {
-        auto n_neighbours = count_neighbours(target, life);
-        return n_neighbours > 1 && n_neighbours < 4;
+        return numberOfNeighbours == 2 || numberOfNeighbours == 3;
     };
 
-    bool shouldSpawn(Cell target, Life const &life)
+    bool shouldSpawn(const int numborOfNeighbours)
     {
-        auto n_neighbours = count_neighbours(target, life);
-        return n_neighbours == 3;
+        return numborOfNeighbours == 3;
     };
-    int count_neighbours(Cell ourCell, Life const &life)
+
+    bool isCellDead(const Cell &cell, const Life &life)
+    {
+        return life.find(cell) == life.end();
+    }
+
+    bool isAliveInNextLife(const Cell &queryCell, const Life &life)
+    {
+        auto nNeighbours = countNeighbours(queryCell, life);
+        return isCellDead(queryCell, life) ? shouldSpawn(nNeighbours) : keepAlive(nNeighbours);
+    }
+
+    int countNeighbours(const Cell &ourCell, const Life &life)
     {
         int sum = 0;
-        for (auto const &lifeCell : life)
+        for (Cell const &lifeCell : life)
         {
             sum += (int)isNeighbour(ourCell, lifeCell);
         }
         return sum;
     };
 
-    // Life getNeigbours(Life &life)
-    // {
-    //     const auto [x_min, x_max] = std::minmax_element(
-    //         begin(life), end(life),
-    //         [](const Cell &a, const Cell &b)
-    //         { return a.x < b.x; });
+    Life getNeigbours(const Cell &cell)
+    {
+        Life result{};
+        for (int x = cell.x - 1; x <= cell.x + 1; x++)
+        {
+            for (int y = cell.y - 1; y <= cell.y + 1; y++)
+            {
+                if (x != cell.x || y != cell.y)
+                {
+                    result.insert({x, y});
+                }
+            }
+        };
+        return result;
+    }
 
-    //     const auto [y_min, y_max] = std::minmax_element(
-    //         begin(life), end(life),
-    //         [](const Cell &a, const Cell &b)
-    //         { return a.y < b.y; });
+    Life stepLife(const Life &initLife)
+    {
+        Life afterLife{};
+        std::pair<Cell, Cell> corner = getCornerCellsExpandedOnce(initLife);
+        for (int x = corner.first.x; x <= corner.second.x; x++)
+        {
+            for (int y = corner.first.y; y <= corner.second.y; y++)
+            {
+                if (isAliveInNextLife(Cell({x, y}), initLife))
+                {
+                    afterLife.insert({x, y});
+                }
+            }
+        }
+        return afterLife;
+    }
 
-    //     Life result{};
-    //     for (int x = x_min->x; x <= x_max->x; x++)
-    //     {
-    //         for (int y = y_min->y; y <= y_max->y; y++)
-    //         {
-    //             result.insert({x, y});
-    //         }
-    //     };
-    //     return result;
-    // };
+    std::pair<Cell, Cell> getCornerCellsExpandedOnce(const Life &life)
+    {
+        const auto y_edge = std::minmax_element(
+            begin(life), end(life),
+            [](const Cell &a, const Cell &b)
+            { return a.y < b.y; });
+
+        return std::pair<Cell, Cell>{
+            {life.begin()->x - 1, y_edge.first->y - 1},
+            {life.rbegin()->x + 1, y_edge.second->y + 1}};
+    }
 }
